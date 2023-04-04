@@ -17,6 +17,26 @@ export class App extends Component {
     filter: '',
   };
 
+  componentDidMount() {
+    // console.log('App componentDidMount');
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
+    // console.log(parsedContacts);
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // console.log('App componentDidUpdate');
+    if (this.state.contacts !== prevState.contacts) {
+      // console.log('update contacts');
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+    // console.log(prevState);
+    // console.log(this.state);
+  }
+
   addContact = ({ name, number }) => {
     const names = this.state.contacts.map(contact => contact.name);
     if (names.indexOf(name) >= 0) {
@@ -41,25 +61,7 @@ export class App extends Component {
     }));
   };
 
-  componentDidMount() {
-    // console.log('App componentDidMount');
-    const contacts = localStorage.getItem('contacts');
-    const parsedContacts = JSON.parse(contacts);
-    // console.log(parsedContacts);
-    if (parsedContacts) {
-      this.setState({ contacts: parsedContacts });
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    // console.log('App componentDidUpdate');
-    if (this.state.contacts !== prevState.contacts) {
-      // console.log('update contacts');
-      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-    }
-    // console.log(prevState);
-    // console.log(this.state);
-  }
+  
 
   render() {
     const { contacts, filter } = this.state;
